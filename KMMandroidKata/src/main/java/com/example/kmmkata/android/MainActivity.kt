@@ -6,6 +6,8 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.kmmkata.Greeting
@@ -19,7 +21,15 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    GreetingView(Greeting().greet())
+                    var text by remember { mutableStateOf("Loading") }
+                    LaunchedEffect(true) {
+                        text = try {
+                            Greeting().greet()
+                        } catch (e: Exception) {
+                            e.localizedMessage ?: "Error"
+                        }
+                    }
+                    GreetingView(text)
                 }
             }
         }
